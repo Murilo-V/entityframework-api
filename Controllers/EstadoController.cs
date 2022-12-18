@@ -21,7 +21,6 @@ namespace APIMySql.Controllers
             _context = context;
         }
 
-        // GET: api/Estado
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Estado>>> GetEstado()
         {
@@ -32,15 +31,14 @@ namespace APIMySql.Controllers
             return await _context.Estado.ToListAsync();
         }
 
-        // GET: api/Estado/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Estado>> GetEstado(string id)
+        [HttpGet("{uf}")]
+        public async Task<ActionResult<Estado>> GetEstado(string uf)
         {
           if (_context.Estado == null)
           {
               return NotFound();
           }
-            var estado = await _context.Estado.FindAsync(id);
+            var estado = await _context.Estado.FindAsync(uf);
 
             if (estado == null)
             {
@@ -50,12 +48,10 @@ namespace APIMySql.Controllers
             return estado;
         }
 
-        // PUT: api/Estado/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutEstado(string id, Estado estado)
+        [HttpPut("{uf}")]
+        public async Task<IActionResult> PutEstado(string uf, Estado estado)
         {
-            if (id != estado.UF)
+            if (uf != estado.UF)
             {
                 return BadRequest();
             }
@@ -68,7 +64,7 @@ namespace APIMySql.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!EstadoExists(id))
+                if (!EstadoExists(uf))
                 {
                     return NotFound();
                 }
@@ -81,8 +77,6 @@ namespace APIMySql.Controllers
             return NoContent();
         }
 
-        // POST: api/Estado
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Estado>> PostEstado(Estado estado)
         {
@@ -110,15 +104,14 @@ namespace APIMySql.Controllers
             return CreatedAtAction("GetEstado", new { id = estado.UF }, estado);
         }
 
-        // DELETE: api/Estado/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEstado(string id)
+        [HttpDelete("{uf}")]
+        public async Task<IActionResult> DeleteEstado(string uf)
         {
             if (_context.Estado == null)
             {
                 return NotFound();
             }
-            var estado = await _context.Estado.FindAsync(id);
+            var estado = await _context.Estado.FindAsync(uf);
             if (estado == null)
             {
                 return NotFound();
@@ -130,9 +123,9 @@ namespace APIMySql.Controllers
             return NoContent();
         }
 
-        private bool EstadoExists(string id)
+        private bool EstadoExists(string uf)
         {
-            return (_context.Estado?.Any(e => e.UF == id)).GetValueOrDefault();
+            return (_context.Estado?.Any(e => e.UF == uf)).GetValueOrDefault();
         }
     }
 }
